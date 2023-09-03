@@ -7,19 +7,15 @@ const koaSend = require("koa-send");
 const oneDayMs = 1000 * 60 * 60 * 24;
 const oneYearMs = oneDayMs * 365;
 
-const { renderPage } = require("./utils/renderTemplate");
+const { renderPage, getPageData } = require("./utils/renderTemplate");
 
 const app = new Koa();
 const router = new Router();
 
-router.get("/", (ctx) => {
-  ctx.body = renderPage("homepage");
-});
-
 router.get(["/assets/(.*)", "/favicon.ico"], async (ctx, next) => {
   let url = ctx.req.url;
   if (url === "/favicon.ico") {
-    url = "/assets/favicon.ico"
+    url = "/assets/favicon.ico";
   }
   const filePath = url.replace("/assets/", "/src/static/");
   if (fs.existsSync(path.join(process.cwd(), filePath))) {
@@ -34,8 +30,24 @@ router.get(["/assets/(.*)", "/favicon.ico"], async (ctx, next) => {
   }
 });
 
+router.get("/api/fullPageData", (ctx) => {
+  const path = ctx.query?.path || "";
+  const pageData = getPageData?.(path);
+  if (!path || !pageData) {
+    ctx.body = {
+      error: "Not found",
+      data: {},
+    };
+  } else {
+    ctx.body = {
+      error: "",
+      data: pageData,
+    };
+  }
+});
+
 router.get("(.*)", (ctx, next) => {
-  ctx.body = renderPage("404");
+  ctx.body = renderPage(ctx.path);
   next();
 });
 

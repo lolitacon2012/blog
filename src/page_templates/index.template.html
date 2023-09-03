@@ -4,25 +4,23 @@
     <meta charset="UTF-8" />
     <title>{{title}}</title>
     <link rel="stylesheet" href="/assets/common/styles.css" />
-    <style>
+    <style id="page-style">
       {{style}}
     </style>
   </head>
   <body>
-    <div class="global-nav">
-      <div><a href="/">Homepage</a></div>
-      <div><a href="/link1">Link 1</a></div>
-      <div><a href="/link2">Link 2</a></div>
-      <div><a href="/link3">Link 3</a></div>
+    <div class="global-max-width">
+      <div class="global-nav">
+        <div><a href="/">Homepage</a></div>
+        <div><a href="/posts">Posts</a></div>
+        <div><a href="/about">About</a></div>
+        <div><a href="/404">404</a></div>
+      </div>
+      <div class="global-stage" id="page-stage">{{body}}</div>
     </div>
-    <div class="global-stage">{{body}}</div>
   </body>
-  <script>
-    {
-      {
-        script;
-      }
-    }
+  <script id="page-script">
+    {{script}}
   </script>
   <script src="/assets/common/index.js"></script>
 </html>

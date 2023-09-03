@@ -1,0 +1,26 @@
+b {
+    color: rgb(60, 189, 77);
+}
+
+table {
+    border-collapse: collapse;
+    max-width      : 100%;
+    margin         : 2rem 0;
+}
+
+table p {
+    margin: 0;
+}
+
+table td,
+table th {
+    padding: 0.5rem;
+}
+
+table tr {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.04);
+}

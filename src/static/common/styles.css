@@ -1,7 +1,13 @@
+:root {
+    --white: #eaeaea;
+    --black: #1d1d1d;
+    --gray : #5c5c5c;
+}
+
 html {
-    background-color  : #1d1d1d;
-    color             : #eaeaea;
-    font-size         : 16px;
+    background-color  : var(--black);
+    color             : var(--white);
+    font-size         : 18px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing   : border-box;
     box-sizing        : border-box;
@@ -36,31 +42,83 @@ h2 {
     font-size: 2rem;
 }
 
+h3 {
+    font-size: 1rem;
+}
+
+img {
+    display: block;
+    width  : 100%;
+}
+
+.image-note {
+    color        : gray;
+    text-align   : center;
+    display      : block;
+    line-height  : 1;
+    margin-bottom: 0.5rem;
+}
+
 a,
 a:active,
 a:visited,
 a:any-link {
-    color: #eaeaea;
+    color          : var(--white);
+    text-decoration: none;
+    border-bottom  : solid 2px var(--white);
 }
 
-.global-max-width {
+q {
+    border-left: solid 2px gray;
+    display    : inline-block;
+    padding    : 1rem 2rem;
+}
+
+q::before {
+    content: none;
+}
+
+.g-max-width {
+    position : relative;
     max-width: 1440px;
     display  : flex;
     margin   : auto;
 }
 
-.global-nav {
+.g-title {
+    position  : absolute;
+    top       : 2rem;
+    left      : 0;
+    width     : 12rem;
+    text-align: center;
+}
+
+.g-title h3 {
+    line-height: 1.5;
+}
+
+.g-nav {
     width          : 12rem;
     display        : flex;
     flex-direction : column;
     justify-content: center;
     align-items    : center;
-    border-right   : solid 2px #5c5c5c;
+    border-right   : solid 2px var(--gray)
 }
 
-.global-stage {
-    flex      : 1;
-    height    : 100vh;
-    overflow-y: auto;
-    padding   : 4rem 8rem;
+.g-nav>a {
+    margin: 1rem 0;
+}
+
+.g-stage {
+    flex              : 1;
+    height            : 100vh;
+    overflow-y        : auto;
+    padding           : 4rem 8rem;
+    -ms-overflow-style: none;
+    scrollbar-width   : none;
+}
+
+.g-stage::-webkit-scrollbar {
+    display: none;
 }

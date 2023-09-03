@@ -1,8 +1,13 @@
 const fetchAvailable = !!fetch;
 const loadClientPage = async (href, isPopState) => {
+  if (href[0] !== "/") {
+    window.location.href = href;
+    return;
+  }
   let json = {};
-  const cache = sessionStorage?.getItem(`client-page-data-${href}`);
-
+  // Disabled for now
+  // const cache = sessionStorage?.getItem(`client-p-data-${href}`);
+  const cache = undefined;
   if (sessionStorage && cache) {
     json = JSON.parse(cache);
   } else {
@@ -14,16 +19,16 @@ const loadClientPage = async (href, isPopState) => {
     );
     json = await response.json();
     if (sessionStorage) {
-      sessionStorage.setItem(`client-page-data-${href}`, JSON.stringify(json));
+      sessionStorage.setItem(`client-p-data-${href}`, JSON.stringify(json));
     }
   }
   if (json.data && !json.error) {
     document.title = json.data.title;
-    document.getElementById("page-style").innerHTML = json.data.style;
-    document.getElementById("page-stage").innerHTML = json.data.body;
-    document.getElementById("page-script").remove();
+    document.getElementById("p-style").innerHTML = json.data.style;
+    document.getElementById("p-stage").innerHTML = json.data.body;
+    document.getElementById("p-script").remove();
     const newScript = document.createElement("script");
-    newScript.setAttribute("id", "page-script");
+    newScript.setAttribute("id", "p-script");
     newScript.innerHTML = json.data.script;
     document.body.appendChild(newScript);
     !isPopState && history.pushState({}, "", href);

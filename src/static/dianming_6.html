@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>点名</title>
+    <style>
+      body {
+        background-color: linen;
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 50vh;
+      }
+
+      .button {
+        font-size: 32px;
+        margin: 0 24px;
+      }
+
+      h1 {
+        color: maroon;
+        font-size: 120px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>初一<span id="className">六</span>班</p>
+    <!-- <button id="switchClassButton">切换班级</button> -->
+    <div class="container">
+      <h1 id="name">点名系统</h1>
+      <div>
+        <button class="button" id="stopButton">停止</button>
+        <button class="button" id="startButton">开始</button>
+      </div>
+    </div>
+  </body>
+  <script>
+    var className = 6;
+    var started = false;
+    var selected = undefined;
+    var students = {
+      "3": [
+        "张梦涵",
+        "贾瑞",
+        "邹晨曦",
+        "袁翊澄",
+        "蔡鑫波",
+        "沈欣瑜",
+        "许念依",
+        "赵妍",
+        "陈卓",
+        "梁欣",
+        "钱佳琦",
+        "李妍",
+        "祁海瑶",
+        "章子萱",
+        "崔瑜洋",
+        "石欣瑜",
+        "张希和",
+        "吴子涵",
+        "印梓悦",
+        "曾资怡",
+        "朱予晗",
+        "陈思涵",
+        "袁可心",
+        "袁福陆慧",
+        "王周琦",
+        "徐煌皓",
+        "周逸澄",
+        "凌裕程",
+        "魏明轩",
+        "张沈",
+        "严佑夆",
+        "刘峻豪",
+        "朱俊亦",
+        "花泽熙",
+        "王湝瑞",
+        "茅文浩",
+        "王子睿",
+        "柳雨泽",
+        "陈子豪",
+        "孙孝涛",
+        "江隽逸",
+        "龙博文",
+        "魏宇航",
+        "王靖玮",
+        "金贤",
+        "蔡铭轩",
+        "资志浩",
+        "徐子翔",
+        "周子轩",
+        "陈皓涵",
+      ],
+      "6": [
+        "严卿蕊",
+        "蒋涵婷",
+        "周妙祺",
+        "毛静茹",
+        "熊悠然",
+        "郭梦琪",
+        "王睿淇",
+        "陈洛琪",
+        "胡诗怡",
+        "周晨玲",
+        "赵馨杨",
+        "刘文瑄",
+        "石芸希",
+        "蒋希诺",
+        "戴子堃",
+        "陈昕怡",
+        "陈文雪",
+        "黄玉玺",
+        "江楠",
+        "杜梓博",
+        "邹鸿",
+        "陆一",
+        "李凯奇",
+        "李焱",
+        "徐琰皓",
+        "俞乐",
+        "朱逸辰",
+        "柳源培",
+        "别陈晨",
+        "许铭峰",
+        "刘泽宇",
+        "李苏洋",
+        "宋子瑜",
+        "单昕",
+        "李雨泽",
+        "万梓轩",
+        "胡甲",
+        "陈柳锟",
+        "柳明远",
+        "刘苏涛",
+        "李陈刚",
+        "李坤泽",
+        "赵朔涵",
+        "马瑞",
+        "王迨晨",
+        "徐浩轩",
+      ],
+    };
+    document
+      .getElementById("stopButton")
+      .addEventListener("click", function () {
+        started = false;
+      });
+    document
+      .getElementById("startButton")
+      .addEventListener("click", function () {
+        started = true;
+      });
+    // document
+    //   .getElementById("switchClassButton")
+    //   .addEventListener("click", function () {
+    //     className = (className === 3 ? 6 : 3);
+    //     document.getElementById("className").innerText =
+    //       className === 3 ? "三" : "六";
+    //   });
+    setInterval(function () {
+      if (started) {
+        document.getElementById("name").innerText =
+          students[className][Math.floor(Math.random() * students[className].length)];
+      }
+    }, 30);
+  </script>
+</html>

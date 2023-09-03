@@ -1,0 +1,59 @@
+html {
+    background-color: #1d1d1d;
+    color           : #eaeaea;
+    font-size         : 16px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing   : border-box;
+    box-sizing        : border-box;
+    margin            : 0;
+    padding           : 0;
+}
+
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing   : inherit;
+    box-sizing        : inherit;
+}
+
+body {
+    font-family     : -apple-system, BlinkMacSystemFont, Tahoma, Arial, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height     : 2;
+    display         : flex;
+    margin          : 0;
+    padding         : 0;
+}
+
+p {
+    font-size: 1rem;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+a,
+a:active,
+a:visited,
+a:any-link {
+    color: #eaeaea;
+}
+
+.global-nav {
+    width          : 12rem;
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items    : center;
+}
+
+.global-stage {
+    flex      : 1;
+    height    : 100vh;
+    overflow-y: auto;
+}

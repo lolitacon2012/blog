@@ -1,0 +1,13 @@
+.post-item {
+    display: flex;
+    width  : 100%;
+}
+
+.post-time {
+    width: 9rem;
+    margin-right: 1rem;
+}
+
+.post-title {
+    flex: 1;
+}

@@ -1,0 +1,26 @@
+<h1>Яваскрипт！用Chrome插件实现图瓦语输入法</h1>
+<p>2018年10月11日 @新加坡</p>
+<br /><br />
+<a
+  href="https://github.com/lolitacon2012/tuvanIMEChromeExtension"
+  rel="noreferrer"
+  target="_blank"
+  >Tuvan Language IME Chrome Extension</a
+>
+<p>随便写写，代码恶心，慎入。</p>
+<p>
+  写这个插件的初衷本来是想解决在知乎写笔记的时候 Ү Ө Ң
+  三个字母输入极其麻烦的问题。然而我实在找不到从background直接劫持键盘事件的并传递给DOM元素的方法，所以这个插件在（几乎）一切富文本编辑器上全部无法使用。
+</p>
+<p>
+  Chrome提供的chrome.input.ime竟然不支持非Chrome
+  OS平台使用，可以说是非常аарыглуг了。
+</p>
+<p>所以这个插件无法解决我在知乎写文章的问题。</p>
+<p>
+  曲线救国方案：在检测到event
+  target不是input或textarea的时候，模仿中文输入法弹出候选框输入，同时复制到剪切板。空白键dispatch触发一个粘贴事件，应该能骗过某些富文本编辑器。明儿试试。
+</p>
+<p>（注：2018年之后再也没有改过一行代码orz）</p>
+<p>晚安。Байырлыг!</p>
+<p>注：Яваскрипт = JavaScript，但是基本没人会这么说了，都直接写英文字母。</p>

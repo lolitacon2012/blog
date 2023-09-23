@@ -1,0 +1,93 @@
+<h1>2022年了，你不来试试Turborepo么？</h1>
+<p>2022年1月17日 @新加坡</p>
+<br /><br />
+<h2>背景</h2>
+<p>
+  公司主产品的前端项目经过近十年的发展，已经成为一个庞大而且复杂的monorepo项目。每次跑CI/CD的时候光是yarn
+  install和build就要耗时1个多小时，再加上单元测试的话逼近3小时，令人痛苦不堪。每次临近产品发布时都会有一堆MR卡在CI/CD这里，严重降低了工作效率。
+</p>
+<p>
+  会出现这个现象的原因很简单：每次跑CI/CD都要从头开始安装依赖，然后build。由于是monorepo，所有package都要被build一遍，即使是几年都没人动的package都要重新build。随着项目规模的增长，build消耗的时间就越来越长，浪费的运算资源越来越大，于是大家就都受不了了。最近老板让我想办法解决一下这个问题，我就先暂时给gitlab
+  CI/CD加上了缓存，以所有yarn.lock的文件哈希值为key缓存node_modules，这样做起码能省下yarn
+  install的时间。然而这也只能大概节省15分钟的时间，完全是杯水车薪。所以我把目光移向了从去年年底开始就超火的Turborepo，看看这东西能不能进一步缩短CI/CD耗时。
+</p>
+<h2>Turborepo是什么</h2>
+<p>
+  <a href="https://turborepo.org/" target="_blank" rel="noreferrer"
+    >Turborepo官网</a
+  >
+</p>
+<p>
+  Turborepo是一个为JS和TS代码库开发的高性能构建系统。它的核心原则就是，只要一个package里的内容没有发生变化，那就永远不重复build。Turborepo会把每次build的产物和日志都缓存起来（而不是像其他一些方案一样只缓存上次的运行结果），只要发现能用缓存就一定直接复制粘贴缓存然后print日志，因此就算是切换branch都能用缓存（甚至连lint这种没有产物的过程都能被缓存！这是因为日志被缓存了）。最神奇的是，它开箱即提供云端缓存储存能力，所以本地开发可以和整个团队以及CI/CD共享同一套缓存库，这就达到了一人build全公司沾光的效果。换算到每个人和CI/CD的头上这得节省多少时间！
+</p>
+<p>
+  另外，Turborepo还提供了可读性很强的、在package.json中直接定义的工作流。它还能根据CPU核心数自动安排线程，最大程度榨干电脑的性能，以缩短时间。Turborepo可以输出拓扑图来展示流程的依赖关系，还能输出能直接在chrome里看的性能记录，用来辅助开发者写出更高效的构建顺序。
+</p>
+<h2>试玩缓存</h2>
+<p>生成一个demo项目</p>
+<code>npx create-turbo@latest turborepo-play</code>
+<p>进入项目，执行yarn build，由于是第一次build所以需要花费一点点时间。</p>
+<code>Time: 11.09s</code>
+<p>
+  然后再次执行yarn build，你会看到整个build过程瞬间结束了。并且在时间那行能看到
+</p>
+<code>Time: 181ms >>> FULL TURBO</code>
+<p>
+  这说明本地缓存起作用了。想想以后能把turborepo用到公司现在臃肿不堪的前端项目之后build会变得多快！
+</p>
+<p>
+  注意看输出里交错执行了web和docs项目的next
+  build，说明turborepo已经自动对这两个build做了并行处理。
+</p>
+<p>
+  下面我们删除docs和web中的.next文件夹，然后再次执行yarn
+  build。Boom！瞬间又build好了！
+</p>
+<code>Time: 133ms >>> FULL TURBO</code>
+<p>这次我们再尝试修改docs下页面中的内容，改一个字。再build：</p>
+<code>Time: 6.808s</code>
+<p>
+  耗时大概是首次build的一半，这是因为只有docs被build了，web走的仍然是缓存。这就是turborepo的威力！
+</p>
+<h2>依赖树和执行顺序</h2>
+<p>
+  执行yarn build --graph（需先<a
+    href="https://graphviz.org/download/"
+    target="_blank"
+    rel="noreferrer"
+    >安装Graphviz</a
+  >），就会在root生成一个package依赖树，拓扑排序一目了然：
+</p>
+<img src="/images/graph-1642429151803819100.jpg" contain />
+<p>
+  Turborepo就会根据这个依赖树确认应该先build谁后build谁。打开package.json往下翻，我们能看到这段：
+</p>
+<code>
+  ... &#x22;turbo&#x22;: { &#x22;pipeline&#x22;: { &#x22;build&#x22;: {
+  &#x22;dependsOn&#x22;: [ &#x22;^build&#x22; ], &#x22;outputs&#x22;: [
+  &#x22;dist/**&#x22;, &#x22;.next/**&#x22; ] }, &#x22;lint&#x22;: {
+  &#x22;outputs&#x22;: [] }, &#x22;dev&#x22;: { &#x22;cache&#x22;: false } } }
+  ...
+</code>
+<p>
+  pipeline定义了build，lint和dev三个流程。build中dependsOn里的^build表示这个步骤需要所有依赖都执行各自的build流程才算完成，Turborepo通过理解用户定义的pipeline结构来自动安排任务执行顺序和并行。outputs表示build产物的路径，以通知Turborepo都需要cache哪些文件。
+</p>
+<p>注意lint的流程里，outputs虽然为空白，但是Turborepo仍然会缓存命令行输出。</p>
+<h2>云端缓存</h2>
+<p>
+  这可能是Turborepo令我最惊叹的功能了。上面的过程中我们所有的缓存都保存在了本地，而Turborepo允许缓存上传至云端以实现所有用户和CI/CD之间共享build产物。Turborepo现在已经支持通过Vercel实现缓存共享（毕竟是自己的东家），但是企业级的应用肯定不会考虑这个方案的。<a
+    href="http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html"
+    target="_blank"
+    rel="noreferrer"
+    >这里</a
+  >给出了自己搭建Turborepo缓存后端的方法，搭建好后执行yarn build
+  --api="https://my-server.example.com"
+  --token="xxxxxxxxxxxxxxxxx"即可自动同步缓存。这个我还没有自己实现，接下来几周应该会在公司里尝试搭建一个试玩一下。
+</p>
+<h2>所以Turborepo有用么？</h2>
+<p>
+  即便是抛开逆天的云端缓存功能不谈，光是智能调度和激进缓存这两个功能就足以说服我在未来的monorepo项目中开始使用Turborepo了。再也不用忍受每次都重新build整个monorepo的痛苦，也不用每次都自己手写pipeline并行策略，是提升工作效率的超棒工具。
+</p>
+<p>
+  目前为止我没发现Turborepo有什么大坑，而且感觉这个工具很轻薄，应该能比较简单地嵌入现有项目。所以作此文以向大家推荐Turborepo，希望各位也能体验一下这清爽的飞起来的感觉。
+</p>

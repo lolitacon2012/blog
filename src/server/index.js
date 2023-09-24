@@ -15,7 +15,7 @@ const {
 const app = new Koa();
 const router = new Router();
 
-const versionHash = new Date().getTime() + "_";
+const versionHash = 'v20';
 
 router.get(["/assets/(.*)", "/favicon.ico"], async (ctx, next) => {
   let url = ((ctx.req.url || "").replace(`.${versionHash}`, "") || "")

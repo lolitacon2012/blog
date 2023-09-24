@@ -15,10 +15,8 @@ const {
 const app = new Koa();
 const router = new Router();
 
-const versionHash = 'v20';
-
 router.get(["/assets/(.*)", "/favicon.ico"], async (ctx, next) => {
-  let url = ((ctx.req.url || "").replace(`.${versionHash}`, "") || "")
+  let url = (ctx.req.url || "" || "")
     .split("/")
     .map((p) => decodeURIComponent(p))
     .join("/")
@@ -56,11 +54,11 @@ router.get("/api/fullPageData", (ctx) => {
 });
 
 router.get("/resources(.*)", (ctx) => {
-  ctx.body = renderResourceBrowser(ctx.path, versionHash);
+  ctx.body = renderResourceBrowser(ctx.path);
 });
 
 router.get("(.*)", (ctx, next) => {
-  ctx.body = renderPage(ctx.path, versionHash);
+  ctx.body = renderPage(ctx.path);
   next();
 });
 

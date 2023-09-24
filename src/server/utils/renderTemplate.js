@@ -26,7 +26,7 @@ const renderTemplate = (data) => {
   return result;
 };
 
-const getPageData = (pageNameInput, versionHash) => {
+const getPageData = (pageNameInput) => {
   let pageName = pageNameInput;
   const cacheResult = myCache.get(pageName);
   if (!isDev && cacheResult) {
@@ -69,20 +69,20 @@ const getPageData = (pageNameInput, versionHash) => {
     );
   } catch (e) {}
   myCache.set(pageName, { ...meta, body, style, script }, cacheTime);
-  return { ...meta, body, style, script, versionHash };
+  return { ...meta, body, style, script };
 };
 
-const renderPage = (pageName, versionHash) => {
+const renderPage = (pageName) => {
   const cacheResult = myCache.get(`${pageName}-rendered`);
   if (!isDev && cacheResult) {
     return cacheResult;
   }
-  const result = renderTemplate(getPageData(pageName, versionHash));
+  const result = renderTemplate(getPageData(pageName));
   !isDev && myCache.set(`${pageName}-rendered`, result, cacheTime);
   return result;
 };
 
-const getResourcePageData = (pathUrl, versionHash) => {
+const getResourcePageData = (pathUrl) => {
   try {
     let convertedPathUrl = decodeURIComponent(
       pathUrl.replace("/resources", "").replaceAll("..", "")
@@ -114,25 +114,24 @@ const getResourcePageData = (pathUrl, versionHash) => {
         )
       );
     return {
-      ...getPageData("resources", versionHash),
+      ...getPageData("resources"),
       title,
       body: `<h1>${title}</h1> <div class="resource-container">${allDirs.join(
         ""
       )}${allFiles.join("")}</div>`,
-      versionHash,
     };
   } catch (e) {
     console.error(e);
-    return getPageData("404", versionHash);
+    return getPageData("404");
   }
 };
 
-const renderResourceBrowser = (path, versionHash) => {
+const renderResourceBrowser = (path) => {
   const cacheResult = myCache.get(`resources-${path}-rendered`);
   if (!isDev && cacheResult) {
     return cacheResult;
   }
-  const result = renderTemplate(getResourcePageData(path, versionHash));
+  const result = renderTemplate(getResourcePageData(path));
   !isDev && myCache.set(`resources-${path}-rendered`, result, cacheTime);
   return result;
 };

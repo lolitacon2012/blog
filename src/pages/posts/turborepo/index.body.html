@@ -58,12 +58,13 @@
     >安装Graphviz</a
   >），就会在root生成一个package依赖树，拓扑排序一目了然：
 </p>
-<img src="/images/graph-1642429151803819100.jpg" contain />
+<img loading="lazy" src="/assets/images/graph-1642429151803819100.jpg" contain />
 <p>
   Turborepo就会根据这个依赖树确认应该先build谁后build谁。打开package.json往下翻，我们能看到这段：
 </p>
 <code>
-  ... &#x22;turbo&#x22;: { &#x22;pipeline&#x22;: { &#x22;build&#x22;: {
+  ...
+  &#x22;turbo&#x22;: { &#x22;pipeline&#x22;: { &#x22;build&#x22;: {
   &#x22;dependsOn&#x22;: [ &#x22;^build&#x22; ], &#x22;outputs&#x22;: [
   &#x22;dist/**&#x22;, &#x22;.next/**&#x22; ] }, &#x22;lint&#x22;: {
   &#x22;outputs&#x22;: [] }, &#x22;dev&#x22;: { &#x22;cache&#x22;: false } } }

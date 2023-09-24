@@ -1,9 +1,16 @@
+const openDirectly = (href) => {
+  if (
+    href[0] !== "/" ||
+    href.indexOf("/resources") === 0 ||
+    href.indexOf("/assets") === 0
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
 const fetchAvailable = !!fetch;
 const loadClientPage = async (href, isPopState) => {
-  if (href[0] !== "/") {
-    window.location.href = href;
-    return;
-  }
   let json = {};
   // Disabled for now
   // const cache = sessionStorage?.getItem(`client-p-data-${href}`);
@@ -41,17 +48,37 @@ const loadClientPage = async (href, isPopState) => {
 if (fetchAvailable) {
   document.body.addEventListener("click", (e) => {
     if (e.target.tagName === "A") {
-      e.preventDefault();
       const href = e.target.getAttribute("href");
-      loadClientPage(href);
+      if (!openDirectly(href)) {
+        e.preventDefault();
+        loadClientPage(href);
+      }
+    } else {
+      let parent = e.target.parentNode;
+      while (parent?.tagName) {
+        if (parent.tagName === "A") {
+          const href = parent.getAttribute("href");
+          if (!openDirectly(href)) {
+            e.preventDefault();
+            loadClientPage(href);
+          }
+          return;
+        } else {
+          parent = parent?.parentNode;
+        }
+      }
     }
   });
   addEventListener("popstate", function (e) {
-    e.preventDefault();
-    loadClientPage(location.pathname, true);
+    if (!openDirectly(location.pathname)) {
+      e.preventDefault();
+      loadClientPage(location.pathname, true);
+    }
   });
   addEventListener("pushstate", function (e) {
-    e.preventDefault();
-    loadClientPage(location.pathname);
+    if (!openDirectly(location.pathname)) {
+      e.preventDefault();
+      loadClientPage(location.pathname);
+    }
   });
 }

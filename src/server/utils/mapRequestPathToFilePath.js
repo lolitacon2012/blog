@@ -9,5 +9,5 @@ const getPageFolderPath = (pageName) => {
 };
 
 module.exports = {
-    getPageFolderPath,
+  getPageFolderPath,
 };

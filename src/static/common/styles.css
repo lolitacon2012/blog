@@ -97,6 +97,20 @@ a:any-link {
     border-bottom     : solid 2px var(--white); */
 }
 
+svg>path {
+    fill        : inherit;
+    stroke      : inherit;
+    stroke-width: inherit;
+}
+
+a>svg {
+    width       : 1.5rem;
+    height      : 1.5rem;
+    fill        : var(--white);
+    stroke      : var(--white);
+    stroke-width: 0;
+}
+
 q {
     border-left       : solid 2px gray;
     display           : inline-block;
@@ -112,7 +126,25 @@ q::before {
 ul,
 ol {
     margin-inline-start: 1rem;
-    ;
+}
+
+hr {
+    background-color: var(--gray);
+    height          : 1px;
+    border          : none;
+}
+
+code {
+    padding         : 1rem;
+    background-color: #000000;
+    color           : var(--white);
+    font-family     : "Courier New", "Courier";
+    font-weight     : 600;
+    font-size       : 1rem;
+    line-height     : 1rem;
+    display         : inline-block;
+    vertical-align  : middle;
+    white-space     : break-spaces;
 }
 
 .g-max-width {
@@ -126,7 +158,7 @@ ol {
     width           : 12rem;
     display         : flex;
     flex-direction  : column;
-    justify-content : center;
+    justify-content : flex-end;
     align-items     : center;
     border-right    : solid 2px var(--gray);
     position        : fixed;
@@ -134,7 +166,8 @@ ol {
     /* use 100vw instead of 100% to prevent the influence of scroll bar */
     top             : 0;
     bottom          : 0;
-    z-index         : 999;
+    padding-bottom  : 2rem;
+    z-index         : 9990;
     background-color: var(--black);
 }
 
@@ -151,7 +184,7 @@ ol {
 @media only screen and (max-width: 1024px) {
 
     html {
-        font-size: 12px;
+        font-size: 16px;
     }
 
     h1 {
@@ -191,6 +224,7 @@ ol {
         border-top     : solid 2px var(--gray);
         height         : 4rem;
         justify-content: space-around;
+        padding-bottom : 0rem;
     }
 
     .g-nav>a {

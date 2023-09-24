@@ -7,13 +7,22 @@ const koaSend = require("koa-send");
 const oneDayMs = 1000 * 60 * 60 * 24;
 const oneYearMs = oneDayMs * 365;
 
-const { renderPage, getPageData } = require("./utils/renderTemplate");
-
+const {
+  renderPage,
+  getPageData,
+  renderResourceBrowser,
+} = require("./utils/renderTemplate");
 const app = new Koa();
 const router = new Router();
 
+const versionHash = new Date().getTime() + "_";
+
 router.get(["/assets/(.*)", "/favicon.ico"], async (ctx, next) => {
-  let url = ctx.req.url;
+  let url = ((ctx.req.url || "").replace(`.${versionHash}`, "") || "")
+    .split("/")
+    .map((p) => decodeURIComponent(p))
+    .join("/")
+    .replaceAll("..", "");
   if (url === "/favicon.ico") {
     url = "/assets/favicon.ico";
   }
@@ -46,8 +55,12 @@ router.get("/api/fullPageData", (ctx) => {
   }
 });
 
+router.get("/resources(.*)", (ctx) => {
+  ctx.body = renderResourceBrowser(ctx.path, versionHash);
+});
+
 router.get("(.*)", (ctx, next) => {
-  ctx.body = renderPage(ctx.path);
+  ctx.body = renderPage(ctx.path, versionHash);
   next();
 });
 

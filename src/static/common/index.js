@@ -39,7 +39,7 @@ const loadClientPage = async (href, isPopState) => {
     newScript.innerHTML = json.data.script;
     document.body.appendChild(newScript);
     !isPopState && history.pushState({}, "", href);
-    window.scrollTo({ top: 0 });
+    // window.scrollTo({ top: 0 });
   } else {
     window.location.href = href;
   }

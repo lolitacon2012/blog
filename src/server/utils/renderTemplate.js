@@ -6,7 +6,7 @@ const { cache: myCache } = require("./cache");
 const { getPageFolderPath } = require("./mapRequestPathToFilePath");
 const { generateItem } = require("./renderResourceBrowser");
 const isDev = process.env.NODE_ENV === "development";
-const cacheTime = isDev ? 10 : 6000000;
+const cacheTime = isDev ? 10 : 3600 * 24 * 666;
 
 const getTemplate = () =>
   fs.readFileSync(
@@ -87,8 +87,8 @@ const getResourcePageData = (pathUrl) => {
     let convertedPathUrl = decodeURIComponent(
       pathUrl.replace("/resources", "").replaceAll("..", "")
     );
-    if(convertedPathUrl?.[convertedPathUrl?.length - 1] !== '/'){
-      convertedPathUrl += '/';
+    if (convertedPathUrl?.[convertedPathUrl?.length - 1] !== "/") {
+      convertedPathUrl += "/";
     }
     const title = `资料库 - ${convertedPathUrl}`;
     const everything = fs.readdirSync(

@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const koaSend = require("koa-send");
 
+const oneHourMs = 1000 * 60 * 60;
 const oneDayMs = 1000 * 60 * 60 * 24;
 const oneYearMs = oneDayMs * 365;
 
@@ -29,7 +30,7 @@ router.get(["/assets/(.*)", "/favicon.ico"], async (ctx, next) => {
     return koaSend(ctx, filePath, {
       root: "",
       immutable: true,
-      maxAge: oneYearMs,
+      maxAge: oneHourMs,
     });
   } else {
     // 404

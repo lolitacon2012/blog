@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon --watch src ./src/server/index.js",
     "start": "NODE_ENV=production node ./src/server/index.js",
-    "deploy": "nvm use 18 && npm install pm2 -g && git pull && npm install && npx pm2 delete blogNew; npx pm2 start --name \"blogNew\" npm -- start"
+    "deploy": "npm install pm2 -g && git pull && npm install && npx pm2 delete blogNew; npx pm2 start --name \"blogNew\" npm -- start"
   },
   "repository": {
     "type": "git",

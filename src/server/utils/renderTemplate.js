@@ -6,7 +6,7 @@ const { cache: myCache } = require("./cache");
 const { getPageFolderPath } = require("./mapRequestPathToFilePath");
 const { generateItem } = require("./renderResourceBrowser");
 const isDev = process.env.NODE_ENV === "development";
-const cacheTime = isDev ? 10 : 3600 * 24 * 666;
+const cacheTime = isDev ? 5 : 60;
 
 const getTemplate = () =>
   fs.readFileSync(

@@ -106,13 +106,35 @@ const getResourcePageData = (pathUrl) => {
       );
     const allFiles = everything
       .filter((dirent) => dirent.isFile())
-      .map((dirent) =>
-        generateItem(
-          `/resources${convertedPathUrl}${dirent.name}`,
-          dirent.name,
-          false
-        )
-      );
+      .map((dirent) => {
+        if (dirent.name?.indexOf(".url") === dirent.name?.length - 4) {
+          try {
+            const data = JSON.parse(
+              fs.readFileSync(
+                path.join(
+                  process.cwd(),
+                  `src/static/resources${convertedPathUrl}${dirent.name}`
+                ),
+                {
+                  encoding: "utf-8",
+                }
+              )
+            );
+            return generateItem(
+              data.url,
+              dirent.name.replace(".url", ""),
+              false,
+              true
+            );
+          } catch (e) {}
+        } else {
+          return generateItem(
+            `/resources${convertedPathUrl}${dirent.name}`,
+            dirent.name,
+            false
+          );
+        }
+      });
     return {
       ...getPageData("resources"),
       title,
